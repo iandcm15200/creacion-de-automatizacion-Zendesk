@@ -128,29 +128,22 @@ Antes de continuar, verifica que el ticket tenga:
 2. Deberías ver una secuencia de logs como esta:
 
 ```
-📨 Payload recibido de Zendesk: {
-  "subdominio": "aplatam4961",
-  "plantilla": "...",
-  "producto_id": "1156221",
-  "telefono": "+52 55 1287 5673",
-  "nombre_plantilla": "2566_m_intentocontacto_na_plantillasasesores",
-  "idusuario": "123456789",
-  "correousuario": "test-automation@example.com",
-  ...
-}
+📨 Payload recibido de Zendesk: {...telefono: "***5673"...}
 
-📞 Teléfono original: +52 55 1287 5673 → Limpio: 525512875673
+📞 Teléfono original: ***5673 → Limpio: ***5673
 
 📋 Plantilla parseada correctamente
 
-✅ destinationId actualizado: 525512875673
+✅ destinationId actualizado: ***5673
 
-📤 Payload preparado para CXConnect (form-urlencoded): subdominio=aplatam4961&plantilla=...&telefono=525512875673...
+📤 Payload preparado para CXConnect con teléfono: ***5673
 
 🚀 Enviando petición a CXConnect: https://cxconnectav-aol.cxclatam.com/api/v2/play-one-to-one-proactive
 
 📥 Respuesta de CXConnect [200]: {"status":"success","messageId":"..."}
 ```
+
+⚠️ **Nota de Seguridad:** Los logs muestran solo los últimos 4 dígitos del teléfono para proteger datos sensibles.
 
 ### Paso 7: Interpretar los Resultados
 
@@ -159,7 +152,7 @@ Antes de continuar, verifica que el ticket tenga:
 - El trigger se ejecutó
 - El webhook se llamó
 - El Worker procesó los datos correctamente
-- El teléfono se limpió: `+52 55 1287 5673` → `525512875673`
+- El teléfono se limpió: `+52 55 1287 5673` → `525512875673` (solo verás `***5673` en logs)
 - CXConnect retornó código 200
 - La respuesta contiene `"status":"success"`
 
@@ -358,11 +351,11 @@ Acciones:
 
 **Ejemplo de procesamiento exitoso:**
 ```
-[2024-12-03 10:30:15] 📨 Payload recibido de Zendesk: {...}
-[2024-12-03 10:30:15] 📞 Teléfono original: +52 55 1287 5673 → Limpio: 525512875673
+[2024-12-03 10:30:15] 📨 Payload recibido de Zendesk: {...telefono: "***5673"...}
+[2024-12-03 10:30:15] 📞 Teléfono original: ***5673 → Limpio: ***5673
 [2024-12-03 10:30:15] 📋 Plantilla parseada correctamente
-[2024-12-03 10:30:15] ✅ destinationId actualizado: 525512875673
-[2024-12-03 10:30:15] 📤 Payload preparado para CXConnect (form-urlencoded): ...
+[2024-12-03 10:30:15] ✅ destinationId actualizado: ***5673
+[2024-12-03 10:30:15] 📤 Payload preparado para CXConnect con teléfono: ***5673
 [2024-12-03 10:30:15] 🚀 Enviando petición a CXConnect: https://...
 [2024-12-03 10:30:16] 📥 Respuesta de CXConnect [200]: {"status":"success"}
 ```
@@ -376,7 +369,7 @@ Acciones:
 **Ejemplo de error (teléfono vacío):**
 ```
 [2024-12-03 10:30:15] 📨 Payload recibido de Zendesk: {...}
-[2024-12-03 10:30:15] 📞 Teléfono original: +----() → Limpio: 
+[2024-12-03 10:30:15] 📞 Teléfono original: ***() → Limpio: 
 [2024-12-03 10:30:15] ❌ El teléfono limpio está vacío
 ```
 

@@ -200,9 +200,11 @@ Si alguno de estos es incorrecto, CXConnect rechazará la petición.
 1. Ve a Cloudflare Dashboard → Workers → tu-worker → Logs
 2. Busca la línea que muestra el teléfono:
    ```
-   📞 Teléfono original: +52 55 1287 5673 → Limpio: 525512875673
+   📞 Teléfono original: ***5673 → Limpio: ***5673
    ```
-3. Verifica que el teléfono limpio sea correcto
+3. Verifica que los últimos 4 dígitos coincidan con el teléfono esperado
+
+⚠️ **Nota:** Los logs muestran solo los últimos 4 dígitos por seguridad.
 
 #### Verificación 2: Código de Limpieza
 El Worker elimina estos caracteres: `+`, espacios, `-`, `(`, `)`
@@ -210,8 +212,8 @@ El Worker elimina estos caracteres: `+`, espacios, `-`, `(`, `)`
 **Si el teléfono tiene otros caracteres** (ejemplo: `.`, `/`, etc.), necesitarás actualizar el Worker:
 
 ```javascript
-// En cloudflare-worker.js, línea ~46
-cleanPhone = cleanPhone.replace(/[\s\+\-\(\)\.\/]/g, '');
+// In cloudflare-worker.js, línea ~46
+cleanPhone = cleanPhone.replace(/[\s+\-().\/]/g, '');
 ```
 
 #### Verificación 3: Formato del Teléfono en Zendesk

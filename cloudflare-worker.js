@@ -27,7 +27,14 @@ async function handleRequest(request) {
   try {
     // Parsear el JSON recibido de Zendesk
     const body = await request.json();
-    console.log('📨 Payload recibido de Zendesk:', JSON.stringify(body, null, 2));
+    
+    // Log sanitizado (oculta información sensible)
+    const sanitizedBody = {
+      ...body,
+      telefono: body.telefono ? '***' + body.telefono.slice(-4) : undefined,
+      correousuario: body.correousuario ? body.correousuario.replace(/(.{2}).*(@.*)/, '$1***$2') : undefined
+    };
+    console.log('📨 Payload recibido de Zendesk:', JSON.stringify(sanitizedBody, null, 2));
 
     // Validar campos requeridos
     const requiredFields = ['subdominio', 'plantilla', 'producto_id', 'telefono', 'nombre_plantilla'];
@@ -47,8 +54,8 @@ async function handleRequest(request) {
     // Limpiar el número de teléfono: eliminar +, espacios, guiones, paréntesis
     let cleanPhone = body.telefono;
     if (typeof cleanPhone === 'string') {
-      cleanPhone = cleanPhone.replace(/[\s\+\-\(\)]/g, '');
-      console.log(`📞 Teléfono original: ${body.telefono} → Limpio: ${cleanPhone}`);
+      cleanPhone = cleanPhone.replace(/[\s+\-()]/g, '');
+      console.log(`📞 Teléfono original: ***${body.telefono.slice(-4)} → Limpio: ***${cleanPhone.slice(-4)}`);
     } else {
       console.error('❌ El campo telefono no es una cadena de texto');
       return new Response(JSON.stringify({
@@ -120,7 +127,7 @@ async function handleRequest(request) {
     if (body.assigneedMail) formData.append('assigneedMail', body.assigneedMail);
     if (body.assigneedId) formData.append('assigneedId', body.assigneedId);
 
-    console.log('📤 Payload preparado para CXConnect (form-urlencoded):', formData.toString());
+    console.log('📤 Payload preparado para CXConnect con teléfono: ***' + cleanPhone.slice(-4));
 
     // Endpoint de CXConnect
     const cxconnectUrl = 'https://cxconnectav-aol.cxclatam.com/api/v2/play-one-to-one-proactive';

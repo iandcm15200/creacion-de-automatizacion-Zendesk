@@ -138,8 +138,8 @@ curl -X POST https://tu-worker.tu-usuario.workers.dev \
 5. Selecciona **"Begin log stream"**
 
 Aquí verás en tiempo real:
-- 📨 Payloads recibidos de Zendesk
-- 📞 Números de teléfono antes y después de limpiarlos
+- 📨 Payloads recibidos de Zendesk (con datos sensibles sanitizados)
+- 📞 Últimos 4 dígitos del teléfono antes y después de limpiarlo
 - 📋 Plantillas parseadas
 - 🚀 Peticiones enviadas a CXConnect
 - 📥 Respuestas de CXConnect
@@ -148,14 +148,16 @@ Aquí verás en tiempo real:
 ### Logs típicos que verás:
 
 ```
-📨 Payload recibido de Zendesk: {...}
-📞 Teléfono original: +52 55 1287 5673 → Limpio: 525512875673
+📨 Payload recibido de Zendesk: {...telefono: "***5673"...}
+📞 Teléfono original: ***5673 → Limpio: ***5673
 📋 Plantilla parseada correctamente
-✅ destinationId actualizado: 525512875673
-📤 Payload preparado para CXConnect (form-urlencoded): ...
+✅ destinationId actualizado: ***5673
+📤 Payload preparado para CXConnect con teléfono: ***5673
 🚀 Enviando petición a CXConnect: https://cxconnectav-aol...
 📥 Respuesta de CXConnect [200]: ...
 ```
+
+⚠️ **Nota de Seguridad:** Los logs sanitizan información sensible como números de teléfono completos y emails para proteger la privacidad.
 
 ---
 

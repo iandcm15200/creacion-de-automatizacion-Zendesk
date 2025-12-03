@@ -107,7 +107,7 @@ WhatsApp del Cliente
 ┌─────────────────────────────────────────────────────────────────┐
 │  CLOUDFLARE WORKER (Middleware)                                 │
 │  1. Recibe JSON de Zendesk                                      │
-│  2. Limpia teléfono: +52 55 1287 5673 → 525512875673           │
+│  2. Limpia teléfono: +52 55 1287 5673 → 525512875673 (sanitizado en logs)  │
 │  3. Actualiza destinationId en plantilla                        │
 │  4. Convierte a form-urlencoded:                                │
 │     telefono=525512875673&plantilla=...&subdominio=...          │
@@ -319,7 +319,7 @@ Etiqueta: no_contesto_whatsapp ✓
 
 4️⃣ **Worker procesa los datos**
 ```
-📞 Limpiando teléfono: +52 55 1287 5673 → 525512875673
+📞 Limpiando teléfono (solo últimos 4 dígitos en logs por seguridad)
 📤 Convirtiendo a form-urlencoded
 🚀 Enviando a CXConnect
 ```
