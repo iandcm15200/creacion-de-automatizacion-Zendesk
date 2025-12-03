@@ -212,7 +212,11 @@ El Worker elimina estos caracteres: `+`, espacios, `-`, `(`, `)`
 **Si el teléfono tiene otros caracteres** (ejemplo: `.`, `/`, etc.), necesitarás actualizar el Worker:
 
 ```javascript
-// In cloudflare-worker.js, línea ~46
+// En cloudflare-worker.js, línea ~57
+// Código actual (limpia +, espacios, -, (, ))
+cleanPhone = cleanPhone.replace(/[\s+\-()]/g, '');
+
+// Si necesitas limpiar también puntos y barras:
 cleanPhone = cleanPhone.replace(/[\s+\-().\/]/g, '');
 ```
 
